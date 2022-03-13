@@ -158,7 +158,7 @@ class cal_trace:
         kernel = kernel_fun(self.t, self.tau1, self.m)
         # convolve kernel and spike
         conv = convolve(self.train_spike, kernel, 'same')
-        # generate calcium trace
+        # generate calcium trace (kernel&spike convolution and noise)
         return conv + self.noise_fun()
 
 

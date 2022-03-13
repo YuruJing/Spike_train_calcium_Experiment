@@ -51,7 +51,7 @@ plt.xlim(0, 60000)
 plt.savefig("Calcium_trace.png")
 plt.show()
 
-# plot calcium trace in 1 period (min) with different m value
+# plot calcium trace in 1 period (min) with different m value (from 4 to 10)
 label3 = []
 for n in range(4, 11):
     cal = cal_trace(spike, total_time_scale, 100, n)
