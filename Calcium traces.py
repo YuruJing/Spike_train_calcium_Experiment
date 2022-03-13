@@ -1,5 +1,4 @@
 from utilis import *
-import pyqtgraph.exporters
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -41,3 +40,28 @@ plt.title("kernel function with different tau1 (m=4)")
 plt.xlabel("Time scale/10ms")
 plt.savefig("kernel_diff_tau.png")
 plt.show()
+
+# generate the calcium trace and plot (use paper tau1 setting 1s)
+cal = cal_trace(spike, total_time_scale, 100, 4)
+# plot the total time scale and truncate the tails
+plt.plot(total_time_scale, cal.total_trace())
+plt.title("Calcium trace (tau1=100, m=4)")
+plt.xlabel("Time scale/10ms")
+plt.xlim(0, 60000)
+plt.savefig("Calcium_trace.png")
+plt.show()
+
+# plot calcium trace in 1 period (min) with different m value
+label3 = []
+for n in range(4, 11):
+    cal = cal_trace(spike, total_time_scale, 100, n)
+    plt.plot(total_time_scale, cal.total_trace())
+    label3.append(r'm = % s' % n)
+
+plt.legend(label3)
+plt.title("Calcium trace in 1 min (tau1=100)")
+plt.xlabel("Time scale/10ms")
+plt.xlim(0, 6000)
+plt.savefig("Calcium_trace_diff_m.png")
+plt.show()
+

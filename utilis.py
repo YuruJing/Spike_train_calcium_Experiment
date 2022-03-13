@@ -1,6 +1,8 @@
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui
 import numpy as np
+import random
+from scipy.signal import convolve
 
 
 # generate the burst points in the given time period
@@ -119,4 +121,44 @@ def kernel_fun(t, tau1, m):
     tau2 = tau1 / m
     k_t = np.exp(-t / tau1) - np.exp(-t / tau2)
     return k_t
+
+
+# create the calcium trace
+class cal_trace:
+    def __init__(self, train_spike, t, tau1, m):
+        """
+        Arguments:
+        :param train_spike: spike_train simulation
+        :param t: total time scale
+        :param tau1: time constant coefficient
+        :param m: adjusting factor
+        """
+        self.train_spike = train_spike
+        self.t = t
+        self.tau1 = tau1
+        self.m = m
+
+# generate the random amplitude coefficient from 0 to 0.02
+    def amp(self):
+        beta = round(random.random() * 0.02, 4)
+        while beta == 0:
+            beta = round(random.random() * 0.02, 4)
+        return beta
+
+# generate the random noise
+    def noise_fun(self):
+        noise = np.random.normal(0, 1, len(self.t))
+        beta = self.amp()
+        noise = beta * noise
+        return noise
+
+# generate the final calcium traces
+    def total_trace(self):
+        # generate kernel function
+        kernel = kernel_fun(self.t, self.tau1, self.m)
+        # convolve kernel and spike
+        conv = convolve(self.train_spike, kernel, 'same')
+        # generate calcium trace
+        return conv + self.noise_fun()
+
 
